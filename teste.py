@@ -13,32 +13,32 @@ def filtrar_placa(img):
 
     # transformar os canais RGB da imagem pra escala de CINZA
     gray =  cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    cv2.imshow('cinza', gray)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('cinza', gray)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # limiarizar a imagem (colocar ela numa escalar bicolor)
     _, bines = cv2.threshold(gray, 115, 255, cv2.THRESH_BINARY)
-    cv2.imshow('binario', bines)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('binario', bines)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # desfocar a imagem para tirar "ruidos" da binarização
     desfoque = cv2.GaussianBlur(bines,(7,7),0)
-    cv2.imshow('desenho', desfoque)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('desenho', desfoque)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # buscar contorno da placa
     contorno, _ = cv2.findContours(desfoque, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    print(str(len(contorno)))
+    # print(str(len(contorno)))
 
     img_contorno = img.copy()
 
     cv2.drawContours(img, contorno, -1, (0, 255, 0), 2)
-    cv2.imshow('contornos', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('contornos', img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
 
     lista_contorno = []
@@ -55,7 +55,8 @@ def filtrar_placa(img):
                 (x, y, alt, lar) = cv2.boundingRect(c)
                 cv2.rectangle(img_contorno, (x,y), (x+alt, y+lar), (0,255,0), 2)
                 lista_contorno.append(c)
-                print(str(len(lista_contorno)))
+                # print(str(len(lista_contorno)))
+
                 # recorto a placa
                 pontos = img_contorno[y:y + lar, x:x + alt]
                 # salvo o recorte da placa numa outra pasta
@@ -73,9 +74,9 @@ def processar_placa():
     if placa is None:
         return 
     
-    resize = cv2.resize(placa, None, fx=4, fy=4, interpolation = cv2.INTER_CUBIC)
-    placa_cinza = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
-    _, placa_limiarizada = cv2.threshold(placa_cinza, 50, 255, cv2.THRESH_BINARY)
+    resize = cv2.resize(placa, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC) #para imagem 4, subistituir o 4 por 2 // para imagem 2, comentar a funcao
+    placa_cinza = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY) #placa = resize se resize é ativo (caso da imagem 2)
+    _, placa_limiarizada = cv2.threshold(placa_cinza, 50, 255, cv2.THRESH_BINARY) #para imagem 4 substituir os 50 por 70 // imagem 2 substitui 50 por 45
 
     cv2.imwrite("tratada/placa.jpg", placa_limiarizada)
 
@@ -107,6 +108,8 @@ if __name__ == "__main__":
 
     _, _, fila = next(walk('carros/'))
     print(fila)
+
+
 
 
 
