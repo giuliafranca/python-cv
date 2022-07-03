@@ -1,4 +1,3 @@
-from os import walk
 import cv2
 import pytesseract
 
@@ -25,6 +24,7 @@ def filtrar_placa(img):
 
     # desfocar a imagem para tirar "ruidos" da binarização
     desfoque = cv2.GaussianBlur(bines,(7,7),0)
+
     # cv2.imshow('desenho', desfoque)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
@@ -36,6 +36,7 @@ def filtrar_placa(img):
     img_contorno = img.copy()
 
     cv2.drawContours(img, contorno, -1, (0, 255, 0), 2)
+
     # cv2.imshow('contornos', img)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
@@ -71,12 +72,30 @@ def processar_placa():
     
     placa = cv2.imread("cortada/pontos.jpg")
 
+    # cv2.imshow('placa', placa)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
     if placa is None:
         return 
     
-    resize = cv2.resize(placa, None, fx=2, fy=2, interpolation = cv2.INTER_CUBIC) #para imagem 4, subistituir o 4 por 2 // para imagem 2, comentar a funcao
+    resize = cv2.resize(placa, None, fx=4, fy=4, interpolation = cv2.INTER_CUBIC) #para imagem 4, subistituir o 4 por 2 // para imagem 2, comentar a funcao
+    
+    cv2.imshow('tamanho', resize)
+    cv2.waitKey(0)
+
+    
     placa_cinza = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY) #placa = resize se resize é ativo (caso da imagem 2)
+
+    # cv2.imshow('cinza', placa_cinza)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
     _, placa_limiarizada = cv2.threshold(placa_cinza, 50, 255, cv2.THRESH_BINARY) #para imagem 4 substituir os 50 por 70 // imagem 2 substitui 50 por 45
+    
+    # cv2.imshow('cinza', placa_limiarizada)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     cv2.imwrite("tratada/placa.jpg", placa_limiarizada)
 
@@ -98,20 +117,3 @@ if __name__ == "__main__":
     
     ocr = acharsaida()
     print(ocr)
-
-    images = [
-        'carros/placa1.jpg',
-        'carros/placa2.jpg',
-        'carros/placa3.jpg',
-        'carros/placa4.jpg'
-    ]
-
-    _, _, fila = next(walk('carros/'))
-    print(fila)
-
-
-
-
-
-
-
