@@ -101,6 +101,7 @@ def processar_placa():
 
 def acharsaida():
     placa = cv2.imread("tratada/placa.jpg")
+
     pytesseract.pytesseract.tesseract_cmd = "C:\Program Files\Tesseract-OCR\Tesseract.exe"
 
     config = r'-c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 --psm 6'
@@ -110,10 +111,13 @@ def acharsaida():
 
 
 if __name__ == "__main__":
+
     img = "carros/placa1.jpg"
+    
     filtrar_placa(img)
     
     processar_placa()
     
     ocr = acharsaida()
+    
     print(ocr)
